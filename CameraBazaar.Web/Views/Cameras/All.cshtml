@@ -1,0 +1,38 @@
+﻿@model IEnumerable<All>
+@{
+    ViewData["Title"] = "All Cameras";
+}
+<div class="table-bordered" style="border:solid">
+    <h2 style="padding:10px;margin:10px">@ViewData["Title"]</h2>
+
+    <form class="table">
+        @foreach (var camera in Model)
+         {
+            <div class="row" style="border:solid;padding:10px;margin:10px">
+                <div class="col-lg-4">
+                    <img width="300" height="300" src="@camera.ImageUrl" />
+                </div>
+                <div class="col-lg-6">
+                    <h3><strong>@camera.Make - @camera.Model</strong></h3>
+                </div>
+                <div class="col-lg-6">
+                    <h3><strong> $@camera.Price</strong></h3>
+
+                </div>
+                <div class="col-lg-4">
+                    <h4><a href="/cameras/details/@camera.Id">Details</a></h4>
+                </div> 
+                <div>
+                    @if (camera.Quantity<=0)
+                    {
+                        <div style="color:red"><strong>OUT OF STOCK</strong></div>
+                    }
+                    @if (camera.Quantity > 0)
+                    {
+                        <div style="color:green"><strong>IN STOCK</strong></div>
+                    }
+                </div>
+            </div>
+         }
+    </form>
+</div>
