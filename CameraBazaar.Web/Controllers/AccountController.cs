@@ -13,6 +13,7 @@ using Microsoft.Extensions.Options;
 using CameraBazaar.Web.Models.AccountViewModels;
 using CameraBazaar.Web.Services;
 using CameraBazaar.Data.Models;
+using CameraBazaar.Web.Infrastructure.Filters;
 
 namespace CameraBazaar.Web.Controllers
 {
@@ -51,6 +52,7 @@ namespace CameraBazaar.Web.Controllers
             return View();
         }
 
+        [MeasureTime]
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]

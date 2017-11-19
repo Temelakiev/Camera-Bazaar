@@ -75,8 +75,9 @@ namespace CameraBazaar.Services.Implementations
                 LightMetering = c.LightMetering,
                 Description = c.Description,
                 ImageUrl = c.ImageUrl,
-                UserId = c.UserId
+                User=c.User
             })
             .FirstOrDefault();
+
     }
 }

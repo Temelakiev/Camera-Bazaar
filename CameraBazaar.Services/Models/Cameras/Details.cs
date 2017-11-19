@@ -8,9 +8,12 @@ namespace CameraBazaar.Services.Models.Cameras
 {
     public class Details
     {
-        public string UserId { get; set; }
-
         public int Id { get; set; }
+
+        public User User { get; set; }
+
+        [Required]
+        public string SellerName { get; set; } 
 
         public CameraMakeType Make { get; set; }
 
@@ -57,5 +60,6 @@ namespace CameraBazaar.Services.Models.Cameras
         [Display(Name = "Image URL")]
         [StringLength(2000, MinimumLength = 10)]
         public string ImageUrl { get; set; }
+
     }
 }

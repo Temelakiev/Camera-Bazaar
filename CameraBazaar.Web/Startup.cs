@@ -12,6 +12,7 @@ using CameraBazaar.Web.Services;
 using CameraBazaar.Data;
 using CameraBazaar.Data.Models;
 using CameraBazaar.Web.Infrastructure.Extensions;
+using CameraBazaar.Web.Infrastructure.Filters;
 
 namespace CameraBazaar.Web
 {
@@ -44,7 +45,10 @@ namespace CameraBazaar.Web
 
             services.AddDomainServices();
 
-            services.AddMvc();
+            services.AddMvc(options=> 
+            {
+                options.Filters.Add<LogAttribute>();
+            });
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)

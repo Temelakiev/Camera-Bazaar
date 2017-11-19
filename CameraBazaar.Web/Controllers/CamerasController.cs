@@ -9,6 +9,8 @@ using CameraBazaar.Services;
 using Microsoft.AspNetCore.Identity;
 using CameraBazaar.Data.Models;
 using CameraBazaar.Services.Models.Cameras;
+using CameraBazaar.Web.Infrastructure.Filters;
+using CameraBazaar.Data;
 
 namespace CameraBazaar.Web.Controllers
 {
@@ -16,14 +18,17 @@ namespace CameraBazaar.Web.Controllers
     {
         private readonly UserManager<User> userManager;
         private readonly ICameraService cameras;
+        private readonly CameraBazaarDbContext db;
 
-        public CamerasController(UserManager<User> userManager, ICameraService cameras)
+        public CamerasController(UserManager<User> userManager, ICameraService cameras, CameraBazaarDbContext db)
         {
             this.userManager = userManager;
             this.cameras = cameras;
+            this.db = db;
         }
 
         [Authorize]
+        [MeasureTime]
         public IActionResult Add()
             => View();
 
@@ -62,6 +67,8 @@ namespace CameraBazaar.Web.Controllers
         {
             var camera = this.cameras.Details(id);
 
+            
+
             return View(new Details
             {
                 Make=camera.Make,
@@ -77,8 +84,10 @@ namespace CameraBazaar.Web.Controllers
                 LightMetering=camera.LightMetering,
                 Description=camera.Description,
                 ImageUrl=camera.ImageUrl,
-                UserId=this.userManager.GetUserId(User)
-        });
+                SellerName=camera.User.UserName
+            });
         }
+
+        
     }
 }

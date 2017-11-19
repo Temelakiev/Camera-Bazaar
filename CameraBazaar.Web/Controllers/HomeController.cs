@@ -5,11 +5,13 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using CameraBazaar.Web.Models;
+using CameraBazaar.Web.Infrastructure.Filters;
 
 namespace CameraBazaar.Web.Controllers
 {
     public class HomeController : Controller
     {
+        [MeasureTime]
         public IActionResult Index()
         {
             return View();
