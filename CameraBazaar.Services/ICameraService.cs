@@ -23,8 +23,13 @@ namespace CameraBazaar.Services
             string imageUrl,
             string userId);
 
-        IEnumerable<All> All();
+        void Edit(int id, CameraMakeType make, string model, decimal price, int quantity, int minShutterSpeed, int maxShutterSpeed, MinISOType minISO, int maxISO, bool isFullFrame, string videoResulution, IEnumerable<LightMetering> lightMetering, string description, string imageUrl, string userId);
 
-        Details Details(int id);
+        IEnumerable<CameraAll> All();
+
+        CameraDetails Details(int id);
+
+        Camera ById(int id);
+        void Delete(int id);
     }
 }

@@ -6,14 +6,9 @@ using System.Text;
 
 namespace CameraBazaar.Services.Models.Cameras
 {
-    public class Details
+    public class CameraEdit 
     {
         public int Id { get; set; }
-
-        public User User { get; set; }
-
-        [Required]
-        public string SellerName { get; set; } 
 
         public CameraMakeType Make { get; set; }
 
@@ -50,7 +45,7 @@ namespace CameraBazaar.Services.Models.Cameras
         public string VideoResulution { get; set; }
 
         [Display(Name = "Light Metering")]
-        public LightMetering LightMetering { get; set; }
+        public IEnumerable<LightMetering> LightMetering { get; set; }
 
         [Required]
         [StringLength(6000)]

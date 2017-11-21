@@ -4,7 +4,7 @@ using System.Text;
 
 namespace CameraBazaar.Services.Models.Cameras
 {
-    public class All
+    public class CameraAll
     {
         public int Id { get; set; }
 

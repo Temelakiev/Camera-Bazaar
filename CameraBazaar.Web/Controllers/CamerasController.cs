@@ -60,6 +60,73 @@ namespace CameraBazaar.Web.Controllers
             return RedirectToAction(nameof(HomeController.Index), "Home");
         }
 
+        [Authorize]
+        public IActionResult Edit(int id)
+        {
+            var camera = (Camera)this.cameras.ById(id);
+
+            if (camera==null)
+            {
+                return NotFound();
+            }
+
+            return this.View(new CameraEdit
+            {
+                Make= camera.Make,
+                Model= camera.Model,
+                Price= camera.Price,
+                Quantity= camera.Quantity,
+                MinShutterSpeed= camera.MinShutterSpeed,
+                MaxShutterSpeed= camera.MaxShutterSpeed,
+                MinISO= camera.MinISO,
+                MaxISO= camera.MaxISO,
+                IsFullFrame= camera.IsFullFrame,
+                VideoResulution= camera.VideoResulution,
+                Description= camera.Description,
+                ImageUrl= camera.ImageUrl,
+            });
+        }
+
+        [HttpPost]
+        [Authorize]
+        IActionResult Edit(int id, CameraEdit modelCamera)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(modelCamera);
+            }
+
+            this.cameras.Edit
+                (
+                    id,
+                    modelCamera.Make,
+                    modelCamera.Model,
+                    modelCamera.Price,
+                    modelCamera.Quantity,
+                    modelCamera.MinShutterSpeed,
+                    modelCamera.MaxShutterSpeed,
+                    modelCamera.MinISO,
+                    modelCamera.MaxISO,
+                    modelCamera.IsFullFrame,
+                    modelCamera.VideoResulution,
+                    modelCamera.LightMetering,
+                    modelCamera.Description,
+                    modelCamera.ImageUrl,
+                    this.userManager.GetUserId(User)
+                );
+
+            return RedirectToAction(nameof(CamerasController.All));
+        }
+
+        public IActionResult Delete(int id) => View(id);
+
+        public IActionResult Destroy(int id)
+        {
+            this.cameras.Delete(id);
+
+            return RedirectToAction(nameof(All));
+        }
+
         public IActionResult All()
             => View(this.cameras.All());
 
@@ -67,9 +134,8 @@ namespace CameraBazaar.Web.Controllers
         {
             var camera = this.cameras.Details(id);
 
-            
 
-            return View(new Details
+            return View(new CameraDetails
             {
                 Make=camera.Make,
                 Model=camera.Model,
@@ -84,7 +150,8 @@ namespace CameraBazaar.Web.Controllers
                 LightMetering=camera.LightMetering,
                 Description=camera.Description,
                 ImageUrl=camera.ImageUrl,
-                SellerName=camera.User.UserName
+                SellerName=camera.User.UserName,
+                User=camera.User
             });
         }
 

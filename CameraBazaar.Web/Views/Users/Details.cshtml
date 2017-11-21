@@ -1,0 +1,65 @@
+﻿@model UserDetails
+@{
+    ViewData["Title"] = "Details";
+}
+<div class="row" style="border:solid;padding:10px;margin:10px">
+    <h2>@Model.Usename</h2>
+    @if (Model.Usename == User.Identity.Name)
+    {
+        <a class="btn btn-primary" href="/users/edit/@Model.Id">Edit Profile</a>
+    }
+    <div><strong>Email: @Model.Email</strong></div>
+    <div><strong>Phone: @Model.PhoneNumber</strong></div>
+    <div>Last login: @Model.LastLogin</div>
+    <div>
+        <strong>Cameras:</strong> @if (Model.Cameras.Sum(c => c.Quantity) > 0)
+        {
+            <span>@(Model.Cameras.Where(c => c.Quantity > 0).Count()) in stock/@(Model.Cameras.Where(c => c.Quantity <= 0).Count())  out of stock</span>
+
+
+        }
+        @if (Model.Cameras.Sum(c => c.Quantity) == 0)
+        {
+            <div>The user is not selling any cameras.Go to <a href="/">home page</a> to find more offers of other users.</div>
+        }
+    </div>
+    <h2><strong>Cameras:</strong></h2>
+    <div>
+        @foreach (var camera in Model.Cameras)
+            {
+            <form class="row" style="border:solid;padding:10px;margin:10px">
+                <div class="col-lg-4">
+                    <img width="300" height="300" src="@camera.ImageUrl" />
+                </div>
+                <div class="col-lg-3">
+                    <h3>@camera.Make - @camera.Model</h3>
+                </div>
+                <div class="col-lg-3">
+                    <h3>$@camera.Price</h3>
+                </div>
+                @if (Model.Usename == User.Identity.Name)
+                {
+                    <a class="btn btn-primary clo-lg-3" href="/cameras/edit/@camera.Id">Edit</a>
+                }
+                @if (Model.Usename == User.Identity.Name)
+                {
+                    <a class="btn btn-danger" href="/cameras/delete/@camera.Id">Delete</a>
+                }
+                <div class="col-lg-3">
+                    <a href="/cameras/details/@camera.Id"><strong>Details</strong></a>
+                </div>
+                <div class="col-lg-4">
+                    @if (camera.Quantity <= 0)
+                    {
+                        <span style="color:red"><strong>OUT OF STOCK</strong></span>
+                    }
+                    @if (camera.Quantity > 0)
+                    {
+                        <span style="color:green"><strong>IN STOCK</strong></span>
+                    }
+                </div>
+            </form>
+        }
+    </div>
+</div>
+

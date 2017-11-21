@@ -7,6 +7,6 @@ namespace CameraBazaar.Services
 {
     public interface IUserService
     {
-        //Details Details(string id);
+        UserDetails Details(string id);
     }
 }

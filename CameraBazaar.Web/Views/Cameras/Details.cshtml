@@ -1,4 +1,4 @@
-﻿@model Details
+﻿@model CameraDetails
 @{
     ViewData["Title"] = "Details";
 }
@@ -17,7 +17,7 @@
             }
         </span>
     </h2>
-    <div><a href="#">@Model.SellerName</a></div>
+    <div><a href="/users/details/@Model.User.Id">@Model.SellerName</a></div>
     <div class="col-lg-4" >
         <img width="300" height="300" src="@Model.ImageUrl" />
     </div>

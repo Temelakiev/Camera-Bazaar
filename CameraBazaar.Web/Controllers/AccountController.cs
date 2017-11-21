@@ -14,6 +14,7 @@ using CameraBazaar.Web.Models.AccountViewModels;
 using CameraBazaar.Web.Services;
 using CameraBazaar.Data.Models;
 using CameraBazaar.Web.Infrastructure.Filters;
+using CameraBazaar.Data;
 
 namespace CameraBazaar.Web.Controllers
 {
@@ -61,12 +62,16 @@ namespace CameraBazaar.Web.Controllers
             ViewData["ReturnUrl"] = returnUrl;
             if (ModelState.IsValid)
             {
+                
                 // This doesn't count login failures towards account lockout
                 // To enable password failures to trigger account lockout, set lockoutOnFailure: true
                 var result = await _signInManager.PasswordSignInAsync(model.Username, model.Password, model.RememberMe, lockoutOnFailure: false);
                 if (result.Succeeded)
                 {
+                  
                     _logger.LogInformation("User logged in.");
+                   
+                    
                     return RedirectToLocal(returnUrl);
                 }
                 if (result.RequiresTwoFactor)

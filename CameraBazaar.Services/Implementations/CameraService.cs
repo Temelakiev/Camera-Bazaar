@@ -17,11 +17,11 @@ namespace CameraBazaar.Services.Implementations
             this.db = db;
         }
 
-        public IEnumerable<All> All()
+        public IEnumerable<CameraAll> All()
             => this.db
             .Cameras
             .OrderBy(c => c.Id)
-            .Select(p => new All
+            .Select(p => new CameraAll
             {
                 Id=p.Id,
                 Make = p.Make.ToString(),
@@ -31,6 +31,9 @@ namespace CameraBazaar.Services.Implementations
                 Quantity = p.Quantity
             })
             .ToList();
+
+        public Camera ById(int id)
+            => this.db.Cameras.Where(c => c.Id == id).FirstOrDefault();
 
         public void Create(CameraMakeType make, string model, decimal price, int quantity, int minShutterSpeed, int maxShutterSpeed, MinISOType minISO, int maxISO, bool isFullFrame, string videoResulution,IEnumerable<LightMetering> lightMetering, string description, string imageUrl, string userId)
         {
@@ -56,11 +59,23 @@ namespace CameraBazaar.Services.Implementations
             this.db.SaveChanges();
         }
 
-        public Details Details(int id)
+        public void Delete(int id)
+        {
+            var camera= this.db.Cameras.Find(id);
+            if (camera == null)
+            {
+                return;
+            }
+
+            this.db.Cameras.Remove(camera);
+            this.db.SaveChanges();
+        }
+
+        public CameraDetails Details(int id)
             => this.db
             .Cameras
             .Where(c => c.Id == id)
-            .Select(c => new Details
+            .Select(c => new CameraDetails
             {
                 Make = c.Make,
                 Model = c.Model,
@@ -79,5 +94,32 @@ namespace CameraBazaar.Services.Implementations
             })
             .FirstOrDefault();
 
+        public void Edit(int id,CameraMakeType make, string model, decimal price, int quantity, int minShutterSpeed, int maxShutterSpeed, MinISOType minISO, int maxISO, bool isFullFrame, string videoResulution, IEnumerable<LightMetering> lightMetering, string description, string imageUrl, string userId)
+        {
+            var camera = this.db.Cameras.Find(id);
+
+            if (camera==null)
+            {
+                return;
+            }
+
+            camera.Make = make;
+            camera.Model = model;
+            camera.Price = price;
+            camera.Quantity = quantity;
+            camera.MinShutterSpeed = minShutterSpeed;
+            camera.MaxShutterSpeed = maxShutterSpeed;
+            camera.MinISO = minISO;
+            camera.MaxISO = maxISO;
+            camera.IsFullFrame = isFullFrame;
+            camera.VideoResulution = videoResulution;
+            camera.LightMetering = (LightMetering)lightMetering.Cast<int>().Sum();
+            camera.Description = description;
+            camera.ImageUrl = imageUrl;
+            camera.UserId = userId;
+
+            this.db.Update(camera);
+            this.db.SaveChanges();
+        }
     }
 }

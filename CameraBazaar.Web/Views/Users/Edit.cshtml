@@ -1,0 +1,30 @@
+﻿@model UserEditProfile
+
+@{
+    ViewData["Title"] = "Edit Profile";
+}
+
+<h2>@ViewData["Title"]</h2>
+<form method="post">
+    <div class="form-group">
+        <label asp-for="Email"></label>
+        <input readonly="readonly" asp-for="Email" class="form-control" />
+        <span asp-validation-for="Email" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Phone"></label>
+        <input readonly="readonly" asp-for="Phone" class="form-control" />
+        <span asp-validation-for="Phone" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="CurrentPassword"></label>
+        <input  asp-for="CurrentPassword" class="form-control" />
+        <span asp-validation-for="CurrentPassword" class="text-danger"></span>
+    </div>
+    <a class="btn btn-default" href="/users/details/@Model.Id">Cancel</a>
+    <a class="btn btn-primary" href="/users/editor/@Model.Id">Edit</a>
+</form>
+
+@section Scripts {
+    @await Html.PartialAsync("_ValidationScriptsPartial")
+}

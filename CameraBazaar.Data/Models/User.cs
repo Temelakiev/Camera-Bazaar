@@ -9,5 +9,7 @@ namespace CameraBazaar.Data.Models
     public class User : IdentityUser
     {
         public List<Camera> Cameras { get; set; } = new List<Camera>();
+
+        public DateTime LastLogin { get; set; }
     }
 }

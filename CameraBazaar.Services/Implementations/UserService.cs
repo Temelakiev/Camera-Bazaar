@@ -4,6 +4,7 @@ using System.Text;
 using CameraBazaar.Services.Models.Users;
 using CameraBazaar.Data;
 using System.Linq;
+using CameraBazaar.Services.Models.Cameras;
 
 namespace CameraBazaar.Services.Implementations
 {
@@ -16,18 +17,31 @@ namespace CameraBazaar.Services.Implementations
             this.db = db;
         }
 
-        //public Details Details(string id)
-        //    => this.db
-        //    .Users
-        //    .Where(u => u.Id == id)
-        //    .Select(u => new Details
-        //    {
-        //        Usename=u.UserName,
-        //        Email=u.Email,
-        //        PhoneNumber=u.PhoneNumber,
-        //        Camera=$@"{this.db.Users.Where(us=>u.Id==id).Select(us=>u.Cameras.Where(c=>c.Quantity>1).Count())} in stock / {this.db.Users.Where(us => u.Id == id).Select(us => u.Cameras.Where(c => c.Quantity <= 0).Count())} out of stock",
-        //        Cameras=this.db.Users.Where(use=>use.Id==id).Select(use=>use.Cameras)
-        //    })
-        //    .FirstOrDefault();
+        public UserDetails Details(string id)
+            => this.db
+            .Users
+            .Where(u => u.Id == id)
+            .Select(u => new UserDetails
+            {
+                Usename = u.UserName,
+                Email = u.Email,
+                LastLogin=u.LastLogin,
+                PhoneNumber = u.PhoneNumber,
+                Cameras = u.Cameras
+            })
+            .FirstOrDefault();
+
+        //
+        public void EditProfile(string id, string password)
+        {
+            var user = this.db.Users.Find(id);
+
+
+
+            user.PasswordHash = password.GetHashCode().ToString();
+
+            this.db.SaveChanges();
+        }
+            
     }
 }
