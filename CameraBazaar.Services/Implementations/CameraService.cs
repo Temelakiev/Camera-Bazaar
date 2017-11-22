@@ -35,8 +35,16 @@ namespace CameraBazaar.Services.Implementations
         public Camera ById(int id)
             => this.db.Cameras.Where(c => c.Id == id).FirstOrDefault();
 
+        public bool CameraExists(int id, string userId)
+            => this.db.Cameras.Any(c => c.Id == id && c.UserId == userId);
+
         public void Create(CameraMakeType make, string model, decimal price, int quantity, int minShutterSpeed, int maxShutterSpeed, MinISOType minISO, int maxISO, bool isFullFrame, string videoResulution,IEnumerable<LightMetering> lightMetering, string description, string imageUrl, string userId)
         {
+            if (lightMetering==null)
+            {
+                lightMetering = new List<LightMetering>();
+            }
+
             var camera = new Camera
             {
                 Make = make,
@@ -94,13 +102,13 @@ namespace CameraBazaar.Services.Implementations
             })
             .FirstOrDefault();
 
-        public void Edit(int id,CameraMakeType make, string model, decimal price, int quantity, int minShutterSpeed, int maxShutterSpeed, MinISOType minISO, int maxISO, bool isFullFrame, string videoResulution, IEnumerable<LightMetering> lightMetering, string description, string imageUrl, string userId)
+        public bool Edit(int id,CameraMakeType make, string model, decimal price, int quantity, int minShutterSpeed, int maxShutterSpeed, MinISOType minISO, int maxISO, bool isFullFrame, string videoResulution, IEnumerable<LightMetering> lightMetering, string description, string imageUrl, string userId)
         {
-            var camera = this.db.Cameras.Find(id);
+            var camera = this.db.Cameras.FirstOrDefault(c=>c.Id==id && c.UserId==userId);
 
             if (camera==null)
             {
-                return;
+                return false; ;
             }
 
             camera.Make = make;
@@ -118,8 +126,9 @@ namespace CameraBazaar.Services.Implementations
             camera.ImageUrl = imageUrl;
             camera.UserId = userId;
 
-            this.db.Update(camera);
             this.db.SaveChanges();
+
+            return true;
         }
     }
 }

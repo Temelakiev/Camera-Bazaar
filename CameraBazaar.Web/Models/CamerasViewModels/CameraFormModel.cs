@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace CameraBazaar.Web.Models.CamerasViewModels
 {
-    public class AddCameraViewModel
+    public class CameraFormModel
     {
         public CameraMakeType Make { get; set; }
 
@@ -44,7 +44,7 @@ namespace CameraBazaar.Web.Models.CamerasViewModels
         public string VideoResulution { get; set; }
 
         [Display(Name = "Light Metering")]
-        public IEnumerable<LightMetering> LightMetering { get; set; }
+        public IEnumerable<LightMetering> LightMetering { get; set; } = new List<LightMetering>();
 
         [Required]
         [StringLength(6000)]

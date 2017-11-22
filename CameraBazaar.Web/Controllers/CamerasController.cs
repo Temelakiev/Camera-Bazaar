@@ -34,8 +34,9 @@ namespace CameraBazaar.Web.Controllers
 
         [Authorize]
         [HttpPost]
-        public IActionResult Add(AddCameraViewModel cameraModel)
+        public IActionResult Add(CameraFormModel cameraModel)
         {
+
             if (!ModelState.IsValid)
             {
                 return View(cameraModel);
@@ -63,14 +64,19 @@ namespace CameraBazaar.Web.Controllers
         [Authorize]
         public IActionResult Edit(int id)
         {
-            var camera = (Camera)this.cameras.ById(id);
+            var cameraExists = this.cameras.CameraExists(id, this.userManager.GetUserId(User));
 
-            if (camera==null)
+            if (!cameraExists)
             {
                 return NotFound();
             }
 
-            return this.View(new CameraEdit
+            var camera = this.cameras.ById(id);
+
+            var lightMetering = new List<LightMetering>();
+            lightMetering.Add(camera.LightMetering);
+            
+            return this.View(new CameraFormModel
             {
                 Make= camera.Make,
                 Model= camera.Model,
@@ -82,38 +88,38 @@ namespace CameraBazaar.Web.Controllers
                 MaxISO= camera.MaxISO,
                 IsFullFrame= camera.IsFullFrame,
                 VideoResulution= camera.VideoResulution,
+                LightMetering=lightMetering,
                 Description= camera.Description,
-                ImageUrl= camera.ImageUrl,
+                ImageUrl= camera.ImageUrl
             });
         }
 
         [HttpPost]
         [Authorize]
-        IActionResult Edit(int id, CameraEdit modelCamera)
+        IActionResult Edit(int id, CameraFormModel cameraModel)
         {
-            if (!ModelState.IsValid)
-            {
-                return View(modelCamera);
-            }
-
-            this.cameras.Edit
+           var updated = this.cameras.Edit
                 (
                     id,
-                    modelCamera.Make,
-                    modelCamera.Model,
-                    modelCamera.Price,
-                    modelCamera.Quantity,
-                    modelCamera.MinShutterSpeed,
-                    modelCamera.MaxShutterSpeed,
-                    modelCamera.MinISO,
-                    modelCamera.MaxISO,
-                    modelCamera.IsFullFrame,
-                    modelCamera.VideoResulution,
-                    modelCamera.LightMetering,
-                    modelCamera.Description,
-                    modelCamera.ImageUrl,
-                    this.userManager.GetUserId(User)
-                );
+                    cameraModel.Make,
+                    cameraModel.Model,
+                    cameraModel.Price,
+                    cameraModel.Quantity,
+                    cameraModel.MinShutterSpeed,
+                    cameraModel.MaxShutterSpeed,
+                    cameraModel.MinISO,
+                    cameraModel.MaxISO,
+                    cameraModel.IsFullFrame,
+                    cameraModel.VideoResulution,
+                    cameraModel.LightMetering,
+                    cameraModel.Description,
+                    cameraModel.ImageUrl,
+                    this.userManager.GetUserId(User));
+
+            if (!updated)
+            {
+                return NotFound();
+            }
 
             return RedirectToAction(nameof(CamerasController.All));
         }
